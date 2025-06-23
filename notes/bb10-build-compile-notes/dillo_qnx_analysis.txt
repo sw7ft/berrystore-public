@@ -1,0 +1,247 @@
+Dillo Browser for QNX - Compilation Analysis
+============================================
+
+DILLO OVERVIEW
+==============
+Dillo is a lightweight, fast web browser designed for minimal resource usage.
+Perfect candidate for embedded systems like BlackBerry QNX.
+
+Key Advantages for QNX:
+- Small footprint (~1.5MB binary)
+- Low memory usage (~10-20MB runtime)
+- Simple C/C++ codebase
+- Designed for embedded systems
+- FLTK GUI (portable toolkit)
+- Reasonable web standards support
+
+DEPENDENCY ANALYSIS
+===================
+
+Critical Dependencies:
+----------------------
+1. FLTK 1.3+ (Fast Light Toolkit)
+   - Lightweight GUI framework
+   - Cross-platform (should work on QNX)
+   - ~500KB library size
+   - Requires: X11 or native graphics
+
+2. zlib
+   - Compression library
+   - Standard on most systems
+   - Likely available in QNX
+
+3. libpng
+   - PNG image support
+   - Standard graphics library
+   - Should compile for QNX
+
+4. libjpeg (or libjpeg-turbo)
+   - JPEG image support
+   - Standard graphics library
+   - ARM optimizations available
+
+5. OpenSSL
+   - HTTPS/TLS support
+   - May be available in QNX
+   - Alternative: mbedTLS
+
+Optional Dependencies:
+---------------------
+- libX11 (X Window System)
+- fontconfig (font management)
+- libXft (anti-aliased fonts)
+- libiconv (character encoding)
+
+QNX-SPECIFIC CHALLENGES
+======================
+
+Graphics System:
+----------------
+QNX uses Photon or QNX Graphics Framework, not X11
+Options:
+1. Use QNX native graphics (requires FLTK port)
+2. Run X11 server on QNX (if available)
+3. Use framebuffer directly
+4. VNC/remote display
+
+Network Stack:
+--------------
+- QNX has POSIX-compliant networking
+- Should work with Dillo's HTTP implementation
+- May need socket compatibility layer
+
+Build System:
+-------------
+- Dillo uses autotools (autoconf/automake)
+- Should work with QNX GCC toolchain
+- May need cross-compilation adjustments
+
+Memory Management:
+-----------------
+- QNX has different memory model
+- Dillo designed for low memory
+- Should be compatible
+
+COMPILATION STRATEGY
+===================
+
+Phase 1: Dependency Building
+---------------------------
+1. Build zlib for QNX
+2. Build libpng for QNX  
+3. Build libjpeg for QNX
+4. Build OpenSSL/mbedTLS for QNX
+5. Build FLTK for QNX (most challenging)
+
+Phase 2: FLTK Port
+------------------
+FLTK options for QNX:
+1. Native QNX Photon backend
+2. X11 backend (if X11 available)
+3. Framebuffer backend
+4. Minimal text-only backend
+
+Phase 3: Dillo Compilation
+--------------------------
+1. Cross-compile Dillo with QNX toolchain
+2. Link against QNX-compiled dependencies
+3. Test basic functionality
+4. Optimize for QNX environment
+
+BUILD COMMANDS OUTLINE
+======================
+
+Environment Setup:
+source ~/bbndk/gcc9/bb10-gcc9/env.sh
+export CC=arm-blackberry-qnx8eabi-gcc
+export CXX=arm-blackberry-qnx8eabi-g++
+export AR=arm-blackberry-qnx8eabi-ar
+export HOST=arm-blackberry-qnx8eabi
+
+Dependency Build Process:
+1. zlib:
+   ./configure --host=$HOST --prefix=/opt/qnx-deps
+   make && make install
+
+2. libpng:
+   ./configure --host=$HOST --prefix=/opt/qnx-deps --with-zlib-prefix=/opt/qnx-deps
+   make && make install
+
+3. libjpeg:
+   ./configure --host=$HOST --prefix=/opt/qnx-deps
+   make && make install
+
+4. FLTK (most complex):
+   ./configure --host=$HOST --prefix=/opt/qnx-deps --enable-shared=no --x-includes=NONE
+   make && make install
+
+5. Dillo:
+   ./configure --host=$HOST --prefix=/opt/qnx-dillo \
+     CPPFLAGS="-I/opt/qnx-deps/include" \
+     LDFLAGS="-L/opt/qnx-deps/lib"
+   make && make install
+
+EXPECTED CHALLENGES
+==================
+
+1. FLTK Graphics Backend
+   - FLTK expects X11 or Win32
+   - Need QNX Photon backend or X11 server
+   - May require FLTK source modifications
+
+2. Font Rendering
+   - QNX may have different font systems
+   - FLTK font handling may need adaptation
+   - Consider bitmap fonts for simplicity
+
+3. Event Handling
+   - Mouse/keyboard events through Photon
+   - FLTK event loop integration
+   - May need custom event translation
+
+4. Network Configuration
+   - DNS resolution differences
+   - Proxy configuration
+   - SSL certificate handling
+
+WORKAROUNDS & ALTERNATIVES
+=========================
+
+If FLTK Proves Difficult:
+1. Use existing QNX GUI framework
+2. Create minimal text-based version
+3. Use VNC for remote display
+4. Port to use QNX native widgets
+
+Minimal Dillo Approach:
+1. Disable images initially
+2. Text-only rendering
+3. Basic HTML parsing
+4. Add features incrementally
+
+Alternative Browsers:
+1. Links2 (text + basic graphics)
+2. NetSurf (different architecture)
+3. Custom HTML viewer using QNX widgets
+
+ESTIMATED EFFORT
+===============
+
+Conservative Estimate:
+- Experienced developer: 2-4 weeks
+- Dependency building: 3-5 days
+- FLTK porting: 1-2 weeks
+- Dillo compilation: 2-3 days
+- Testing/debugging: 3-5 days
+
+Realistic Timeline:
+- Allow 1-2 months for full implementation
+- Start with minimal feature set
+- Iterate and add functionality
+
+SUCCESS PROBABILITY
+==================
+
+High (70-80%) - Much better than Chromium because:
+✓ Designed for embedded systems
+✓ Minimal dependencies
+✓ C/C++ codebase compatible with QNX
+✓ FLTK is portable
+✓ Active community support
+✓ Existing embedded ports
+
+RECOMMENDED APPROACH
+===================
+
+1. Start with dependency survey:
+   - Check what's already available in QNX
+   - Build missing libraries first
+   - Test each dependency individually
+
+2. FLTK prototype:
+   - Get basic FLTK window working
+   - Ensure graphics system compatibility
+   - Simple "Hello World" FLTK app
+
+3. Minimal Dillo:
+   - Compile with minimal features
+   - Text-only rendering initially
+   - Add graphics support incrementally
+
+4. Feature enhancement:
+   - Add image support
+   - Enable HTTPS
+   - Improve rendering
+
+NEXT STEPS
+==========
+
+If proceeding:
+1. Survey existing QNX packages
+2. Download Dillo and FLTK source
+3. Set up cross-compilation environment
+4. Build dependency chain
+5. Attempt FLTK compilation first
+
+This is much more achievable than Chromium and would provide
+a functional web browser for your QNX system. 

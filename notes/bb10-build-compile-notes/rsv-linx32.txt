@@ -1,0 +1,63 @@
+Mini-RV32IMA RISC-V Emulator on BlackBerry 10 - Session Recap
+Overview
+We successfully built and ran a RISC-V emulator on BlackBerry 10 that can execute Linux. The emulator, mini-rv32ima, is a lightweight implementation that can run various RISC-V Linux kernel images.
+What We Accomplished
+Initial Environment Setup:
+Created a build directory: ~/mini-rv32ima-build
+Cloned the mini-rv32ima repository
+Cloned the mini-rv32ima-images repository for Linux images
+Building the Emulator:
+Compiled mini-rv32ima for BlackBerry QNX/BlackBerry 10
+Used the BlackBerry QNX toolchain (arm-blackberry-qnx8eabi-gcc)
+Created a minimal version first to test compatibility
+Finding and Preparing Linux Images:
+Downloaded RISC-V Linux kernel images from CNLohr's mini-rv32ima-images repository
+Organized different kernel versions (5.18.0, 6.5.12, 6.8-rc1)
+Included a special image with Doom (Image-emdoom-MAX_ORDER_14)
+Packaging for BlackBerry 10:
+Created a directory structure with:
+bin/ - The emulator executable
+images/ - Linux kernel images
+scripts/ - Helper scripts to run different images
+run_all.sh - Master script for selecting images to run
+Running Linux on BlackBerry 10:
+Successfully booted Linux kernel 5.19.0 with the Doom image
+Allocated sufficient memory (128-256MB) to run the system
+Logged in as root to the Buildroot Linux system
+Found and explored the emdoom executable
+Key Files and Their Locations
+Emulator Executable: bin/mini-rv32ima
+Doom Linux Image: images/emdoom/Image-emdoom-MAX_ORDER_14
+Profile Test Images:
+images/profile-5.18.0/Image.ProfileTest
+images/profile-6.5.12/Image
+images/profile-6.8-rc1/Image
+Run Scripts:
+run_doom.sh - Script to run the Doom image
+run_profile.sh - Script to run the profile test image
+run_all.sh - Menu to select different images
+How to Run Linux
+Basic Command:
+Apply to rsv-linx32.t...
+"
+Login Credentials:
+Username: root
+Password: (none, just press Enter)
+Memory Requirements:
+Doom image needs at least 128MB RAM (-m 134217728)
+Profile test images can run with less memory
+Future Possibilities
+Larger Linux Distributions:
+Build custom Buildroot images with more applications
+Try to adapt Debian RISC-V (rv32) images
+Custom Development:
+Create specialized RISC-V applications
+Explore RISC-V assembly programming
+Other Emulators:
+QEMU for more complete system emulation
+Explore other lightweight RISC-V emulators
+References
+Mini-RV32IMA Repository: https://github.com/cnlohr/mini-rv32ima
+Linux Images Repository: https://github.com/cnlohr/mini-rv32ima-images
+Buildroot Project: https://buildroot.org/
+RISC-V Architecture: https://riscv.org/
