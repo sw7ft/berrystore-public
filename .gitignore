@@ -1,0 +1,54 @@
+# IDE and Editor Configuration
+.frolic-session.json
+*.frolic*
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Log files
+*.log
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+
+# Compressed files (if not intentionally distributed)
+# Uncomment these if you don't want to track large archives
+# *.zip
+# *.tar
+# *.tar.gz
+# *.tar.bz2
+# *.rar
+# *.7z
+
+# Development environment
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log* 
