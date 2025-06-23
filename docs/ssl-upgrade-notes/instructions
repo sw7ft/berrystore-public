@@ -1,0 +1,5 @@
+Method 2: Direct Download from Let's Encrypt (Thanks to @BeerBear for this method!)
+
+Download the ISRG Root X1 certificate directly from https://letsencrypt.org/certificates/ as a pem file. You could use an alternative browser like the PaperBird Beta browser to download the file directly into the download folder on your BB10 device. Or you could download the certificate on another device and transfer it over to your BB10 smartphone.
+On the phone, open the folder where you saved the file in your file manager. Tap on the file and complete the import process.
+Then go to settings > Security and Privacy > Certificates. Scroll down and select "DST Root CA X3". Uncheck the 'trusted' box.
